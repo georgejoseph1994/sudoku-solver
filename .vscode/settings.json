@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        "*.class": true,
+        "*/*.class": true
+    },
+    "editor.formatOnSave": true
+}
