@@ -23,9 +23,6 @@ public class StdSudokuGrid extends SudokuGrid {
 
 	public StdSudokuGrid() {
 		super();
-
-		
-
 	}
 
 	/* ********************************************************* */
@@ -101,101 +98,7 @@ public class StdSudokuGrid extends SudokuGrid {
 
 	} // end of toString()
 
-	/**
-	 * Method to check if a Sudoku row is valid
-	 * 
-	 * @param rowIndex
-	 * @return Boolean representing the validity of a row
-	 */
-	public boolean validateRow(int rowIndex) {
-		HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>();
-
-		/* Creating a hash map from the valid inputs */
-		for (int i = 0; i < this.validInputs.length; i++) {
-			map.put(this.validInputs[i], false);
-		}
-
-		/* Iterating through the columns */
-		for (int j = 0; j < this.gridSize; j++) {
-			/* Skipping if -1 */
-			if (this.grid[rowIndex][j] != -1) {
-				/* Checking if it is a valid input in the grid */
-				if (map.containsKey(this.grid[rowIndex][j])) {
-					if (map.get(this.grid[rowIndex][j])) {
-						return false;
-					} else {
-						map.put(this.grid[rowIndex][j], true);
-					}
-				} else {
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	public boolean validateColumn(int colIndex) {
-		HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>();
-
-		/* Creating a hash map from the valid inputs */
-		for (int i = 0; i < this.validInputs.length; i++) {
-			map.put(this.validInputs[i], false);
-		}
-
-		/* Iterating through the columns */
-		for (int i = 0; i < this.gridSize; i++) {
-			/* Skipping if -1 */
-			if (this.grid[i][colIndex] != -1) {
-				/* Checking if it is a valid input in the grid */
-				if (map.containsKey(this.grid[i][colIndex])) {
-					if (map.get(this.grid[i][colIndex])) {
-						return false;
-					} else {
-						map.put(this.grid[i][colIndex], true);
-					}
-				} else {
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	public boolean validateBox(int boxNumber) {
-		HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>();
-
-		/* Creating a hash map from the valid inputs */
-		for (int i = 0; i < this.validInputs.length; i++) {
-			map.put(this.validInputs[i], false);
-		}
-		
-		/* Calculating inner box dimensions*/
-		int boxSize = (int) (Math.sqrt(this.gridSize));
-		int startingRow = (boxNumber / boxSize) * boxSize;
-		int startingCol = (boxNumber % boxSize) * boxSize;
-
-		for (int i = startingRow; i < startingRow + boxSize; i++) {
-			for (int j = startingCol; j < startingCol + boxSize; j++) {
-				/* Skipping if -1 */
-				if (this.grid[i][j] != -1) {
-					/* Checking if it is a valid input in the grid */
-					if (map.containsKey(this.grid[i][j])) {
-						if (map.get(this.grid[i][j])) {
-							return false;
-						} else {
-							map.put(this.grid[i][j], true);
-						}
-					} else {
-						return false;
-					}
-				}
-			}
-		}
-
-		return true;
-	}
+	
 
 	@Override
 	public boolean validate() {

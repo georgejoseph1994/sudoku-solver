@@ -53,7 +53,7 @@ public class RmitSudoku
             bVisualise = true;
         }
 
-        // optional argument.  If specified, then we also output solved grid
+        // optional argument.  If specified, then we also output solved grid 
         // to file.
         String solvedGridOutFilename = null;
         if (args.length > 4) {
