@@ -51,7 +51,7 @@ public class KillerSudokuGrid extends SudokuGrid {
 				} else {
 					/* Getting the grid */
 					String SplittedString[] = lines[i].trim().split(" ");
-					String possArray[] = SplittedString[0].split(",");
+					String possArray[] = SplittedString[0].split(","); 
 
 					int xPosition = Integer.parseInt(possArray[0]);
 					int yPosition = Integer.parseInt(possArray[1]);
