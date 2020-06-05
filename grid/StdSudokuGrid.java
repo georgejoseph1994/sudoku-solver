@@ -24,12 +24,7 @@ public class StdSudokuGrid extends SudokuGrid {
 	public StdSudokuGrid() {
 		super();
 
-		/**
-		 * Filling empty array spots with default -1 value
-		 */
-		for (int[] row : this.grid) {
-			Arrays.fill(row, -1);
-		}
+		
 
 	}
 
@@ -47,6 +42,14 @@ public class StdSudokuGrid extends SudokuGrid {
 				if (0 == i) {
 					/* Getting grid size */
 					this.gridSize = Integer.parseInt(lines[i].trim());
+					
+					this.grid = new int[this.gridSize][this.gridSize];
+					/**
+					 * Filling empty array spots with default -1 value
+					 */
+					for (int[] row : this.grid) {
+						Arrays.fill(row, -1);
+					}
 				} else if (1 == i) {
 					/* Getting valid inputs */
 					this.validInputs = Arrays.stream(lines[i].trim().split(" ")).mapToInt(Integer::parseInt).toArray();

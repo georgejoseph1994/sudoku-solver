@@ -13,7 +13,7 @@
  */
 public abstract class SudokuGrid
 {
-	public int grid[][] = new int[100][100];
+	public int grid[][];
 	public int gridSize;
 	public int validInputs[];
     /** 
