@@ -12,7 +12,7 @@ import grid.SudokuGrid;
 public class BackTrackingSolver extends StdSudokuSolver {
 	// TODO: Add attributes as needed.
 
-	public BackTrackingSolver() {
+	public BackTrackingSolver() { 
 		// TODO: any initialisation you want to implement.
 	} // end of BackTrackingSolver()
 

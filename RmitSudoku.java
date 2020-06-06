@@ -178,7 +178,7 @@ public class RmitSudoku
      * @param pair Used to return the constructed grid and solver (return by
      *               reference).
      */
-    private static void initSudokuSolver(String solverType, SolverGridPair pair) {
+    private static void initSudokuSolver(String solverType, SolverGridPair pair) { 
         SudokuGrid grid = null;
         SudokuSolver solver = null;
 

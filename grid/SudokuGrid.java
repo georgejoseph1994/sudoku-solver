@@ -131,7 +131,7 @@ public abstract class SudokuGrid
 	}
 
 	public boolean validateBox(int boxNumber) {
-		HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+		HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>(); 
 
 		/* Creating a hash map from the valid inputs */
 		for (int i = 0; i < this.validInputs.length; i++) {

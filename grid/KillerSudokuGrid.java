@@ -95,7 +95,7 @@ public class KillerSudokuGrid extends SudokuGrid {
 	} // end of outputBoard()
 
 	@Override
-	public String toString() {
+	public String toString() { 
 		String gridString = "";
 
 		for (int i = 0; i < this.gridSize; i++) {
@@ -247,12 +247,6 @@ public class KillerSudokuGrid extends SudokuGrid {
 			} else {
 				return false;
 			}
-
-//			if( this.validateRow(i) && this.validateColumn(i) && this.validateBox(i)) {
-//				continue;
-//			}else {
-//				return false;
-//			}
 		}
 
 		if (!this.validateCage())

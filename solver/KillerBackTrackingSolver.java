@@ -7,42 +7,47 @@ package solver;
 import grid.KillerSudokuGrid;
 import grid.SudokuGrid;
 
-
 /**
  * Backtracking solver for Killer Sudoku.
  */
-public class KillerBackTrackingSolver extends KillerSudokuSolver
-{
-    // TODO: Add attributes as needed.
+public class KillerBackTrackingSolver extends KillerSudokuSolver {
+	// TODO: Add attributes as needed.
 
-    public KillerBackTrackingSolver() {
-        // TODO: any initialisation you want to implement. 
-    } // end of KillerBackTrackingSolver()
+	public KillerBackTrackingSolver() {
+		// TODO: any initialisation you want to implement.
+	} // end of KillerBackTrackingSolver()
 
-    
-    public boolean fastValidate(SudokuGrid grid, int i, int j) {
-    	int boxSize = (int) (Math.sqrt(grid.gridSize));
-    	if(grid.validateRow(i) && grid.validateColumn(j) && grid.validateBox((boxSize*(i/boxSize))+ (j/boxSize)) && ((KillerSudokuGrid)grid).fastValidateCage(i,j)) {
-    		
-    		return true;
-    	}else{
-    		return false;
-    	}
-    }
-    
-    @Override
-    public boolean solve(SudokuGrid grid) {
-    	for (int i = 0; i < grid.gridSize; i++) {
+	public boolean fastValidate(int boxSize, SudokuGrid grid, int i, int j) {
+
+		return grid.validateRow(i) 
+				&& grid.validateColumn(j)
+				&& grid.validateBox((boxSize * (i / boxSize)) + (j / boxSize))
+				&& ((KillerSudokuGrid) grid).fastValidateCage(i, j);
+	}
+
+	@Override
+	public boolean solve(SudokuGrid grid) {
+		int boxSize = (int) (Math.sqrt(grid.gridSize));
+//    	System.out.println(grid);
+//    	
+//    	try {
+//			Thread.sleep(800);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
+		for (int i = 0; i < grid.gridSize; i++) {
 			for (int j = 0; j < grid.gridSize; j++) {
 
 				if (grid.grid[i][j] == -1) {
 					int sizeOfValidInputs = grid.validInputs.length;
 					for (int k = 0; k < sizeOfValidInputs; k++) {
 						grid.grid[i][j] = grid.validInputs[k];
-						
+
 						/* Checking if valid grid */
-						if (fastValidate(grid, i, j) == true) {
-//							System.out.println(grid);
+						if (fastValidate(boxSize, grid, i, j) == true) {
+
 							if (!solve(grid)) {
 								grid.grid[i][j] = -1;
 							} else
