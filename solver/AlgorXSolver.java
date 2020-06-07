@@ -113,9 +113,9 @@ public class AlgorXSolver extends StdSudokuSolver {
 	public void displayCoverMatrix() {
 		for (int i = 0; i < cmRowCount; i++) {
 			for (int j = 0; j < cmColCount; j++) {
-				if(this.cmActiveRows.contains(i) && this.cmActiveCols.contains(j)) {
+				if (this.cmActiveRows.contains(i) && this.cmActiveCols.contains(j)) {
 					System.out.print(this.coverMatrix[i][j]);
-				}else {
+				} else {
 					System.out.print(" ");
 				}
 				if ((j + 1) % Math.pow(gridSize, 2) == 0) {
@@ -152,6 +152,17 @@ public class AlgorXSolver extends StdSudokuSolver {
 		returnArr[0] = removedRows;
 		returnArr[1] = removedCols;
 		return returnArr;
+	}
+
+	/*
+	 * Method to uncover a previous cover operation
+	 */
+	public void uncoverRowColRow(ArrayList<Integer>[] rowColToUncover) {
+		ArrayList<Integer> removedRows = rowColToUncover[0];
+		ArrayList<Integer> removedCols = rowColToUncover[1];
+
+		this.cmActiveRows.addAll(removedRows);
+		this.cmActiveCols.addAll(removedCols);
 	}
 
 	@Override
@@ -210,16 +221,55 @@ public class AlgorXSolver extends StdSudokuSolver {
 
 			int choosenColumn = this.cmActiveCols.get(0);
 			int selectedRow = -1;
+			ArrayList<Integer> cmActiveRowsCopy = new ArrayList<Integer>();
+			cmActiveRowsCopy.addAll(cmActiveRows);
+
+			for (int i1 = 0; i1 < cmActiveRowsCopy.size(); i1++) {
+
+				if (this.coverMatrix[cmActiveRowsCopy.get(i1)][choosenColumn] == 1) {
+
+					selectedRow = cmActiveRowsCopy.get(i1);
+					this.partialSolution.add(selectedRow);
+					this.cmActiveRows.remove(Integer.valueOf(selectedRow));
+
+					ArrayList<Integer>[] returnArr = this.coverRowColRow(selectedRow);
+					/* Recursive call */
+					if (this.recursiveAlgoXSolve()) {
+						return true;
+					} else {
+						this.partialSolution.remove(new Integer(selectedRow));
+						this.uncoverRowColRow(returnArr);
+					}
+				}
+			}
+
+		}
+		return false;
+	}
+
+	public boolean recursiveAlgoXSolve2() {
+		System.out.println("in algox 2");
+//		System.out.println(Arrays.deepToString(this.partialSolution.toArray()));
+//		this.displayCoverMatrix();
+
+		/* Checking if constraint is met */
+		if (this.cmActiveCols.size() == 0 && this.cmActiveRows.size() == 0) {
+			return true;
+		} else if (this.cmActiveCols.size() == 0 || this.cmActiveRows.size() == 0) {
+			return false;
+		} else {
+			int choosenColumn = this.cmActiveCols.get(0);
+			int selectedRow = -1;
 
 			for (int i1 = 0; i1 < this.cmActiveRows.size(); i1++) {
 				if (this.coverMatrix[cmActiveRows.get(i1)][choosenColumn] == 1) {
 					selectedRow = cmActiveRows.get(i1);
-					
+
 					this.partialSolution.add(selectedRow);
 
 					ArrayList<Integer> removedRows = new ArrayList<Integer>();
 					ArrayList<Integer> removedCols = new ArrayList<Integer>();
-
+					this.cmActiveRows.remove(Integer.valueOf(selectedRow));
 					Iterator<Integer> colItr = this.cmActiveCols.iterator();
 					while (colItr.hasNext()) {
 						int j = (Integer) colItr.next();
@@ -239,76 +289,17 @@ public class AlgorXSolver extends StdSudokuSolver {
 					}
 
 					/* Recursive call */
-					if (this.recursiveAlgoXSolve()) {
+					if (this.recursiveAlgoXSolve2()) {
 						return true;
 					} else {
-						System.out.println("backtracking");
-						this.partialSolution.remove(new Integer(this.partialSolution.indexOf(selectedRow)));
+//						System.out.println("backtracking");
+						this.partialSolution.remove(new Integer(selectedRow));
 						this.cmActiveCols.addAll(removedCols);
 						this.cmActiveRows.addAll(removedRows);
 					}
 				}
 			}
 
-			
-		}
-		return false;
-	}
-
-	public boolean recursiveAlgoXSolve2() {
-		System.out.println(Arrays.deepToString(this.partialSolution.toArray()));
-		/* Checking if constraint is met */
-		if (this.cmActiveCols.size() == 0 && this.cmActiveRows.size() == 0) {
-			return true;
-		} else if (this.cmActiveCols.size() == 0 || this.cmActiveRows.size() == 0) {
-			return false;
-		} else {
-
-			int choosenColumn = this.cmActiveCols.get(0);
-			int selectedRow = -1;
-
-			for (int i = 0; i < this.cmActiveRows.size(); i++) {
-				if (this.coverMatrix[cmActiveRows.get(i)][choosenColumn] == 1) {
-					selectedRow = cmActiveRows.get(i);
-					break;
-				}
-			}
-
-			if (selectedRow != -1) {
-				this.partialSolution.add(selectedRow);
-			} else {
-				return false;
-			}
-
-			ArrayList<Integer> removedRows = new ArrayList<Integer>();
-			ArrayList<Integer> removedCols = new ArrayList<Integer>();
-
-			Iterator<Integer> colItr = this.cmActiveCols.iterator();
-			while (colItr.hasNext()) {
-				int j = (Integer) colItr.next();
-
-				if (this.coverMatrix[selectedRow][j] == 1) {
-					removedCols.add(j);
-					colItr.remove();
-					Iterator<Integer> rowItr = this.cmActiveRows.iterator();
-					while (rowItr.hasNext()) {
-						int i = (Integer) rowItr.next();
-						if (this.coverMatrix[i][j] == 1) {
-							removedRows.add(i);
-							rowItr.remove();
-						}
-					}
-				}
-			}
-
-			/* Recursive call */
-			if (this.recursiveAlgoXSolve()) {
-				return true;
-			} else {
-				this.partialSolution.remove(new Integer(this.partialSolution.indexOf(selectedRow)));
-				this.cmActiveCols.addAll(removedCols);
-				this.cmActiveRows.addAll(removedRows);
-			}
 		}
 		return false;
 	}
