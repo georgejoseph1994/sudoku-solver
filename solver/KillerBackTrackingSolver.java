@@ -17,6 +17,9 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver {
 		// TODO: any initialisation you want to implement.
 	} // end of KillerBackTrackingSolver()
 
+	/*
+	 * Validates only the row, column, box and cage of the input i and j.
+	 */
 	public boolean fastValidate(int boxSize, SudokuGrid grid, int i, int j) {
 
 		return grid.validateRow(i) 
@@ -28,31 +31,30 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver {
 	@Override
 	public boolean solve(SudokuGrid grid) {
 		int boxSize = (int) (Math.sqrt(grid.gridSize));
-//    	System.out.println(grid);
-//    	
-//    	try {
-//			Thread.sleep(800);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
+		
+		/* iterating through the grid*/
 		for (int i = 0; i < grid.gridSize; i++) {
 			for (int j = 0; j < grid.gridSize; j++) {
 
 				if (grid.grid[i][j] == -1) {
+					
 					int sizeOfValidInputs = grid.validInputs.length;
+					/* iterating through the valid inputs array*/
 					for (int k = 0; k < sizeOfValidInputs; k++) {
+						
+						/* Assigning the grid values to value in valid inputs one by one*/
 						grid.grid[i][j] = grid.validInputs[k];
 
 						/* Checking if valid grid */
 						if (fastValidate(boxSize, grid, i, j) == true) {
-
+							
+							/* if valid calling the method solve again */
 							if (!solve(grid)) {
 								grid.grid[i][j] = -1;
 							} else
 								break;
 						} else {
+							/* resetting the grid position*/
 							grid.grid[i][j] = -1;
 						}
 					}

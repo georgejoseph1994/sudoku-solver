@@ -19,7 +19,6 @@ import java.util.HashMap;
  */
 public class StdSudokuGrid extends SudokuGrid {
 	// TODO: Add your own attributes
-	
 
 	public StdSudokuGrid() {
 		super();
@@ -39,7 +38,7 @@ public class StdSudokuGrid extends SudokuGrid {
 				if (0 == i) {
 					/* Getting grid size */
 					this.gridSize = Integer.parseInt(lines[i].trim());
-					
+
 					this.grid = new int[this.gridSize][this.gridSize];
 					/**
 					 * Filling empty array spots with default -1 value
@@ -67,6 +66,9 @@ public class StdSudokuGrid extends SudokuGrid {
 		}
 	} // end of initBoard()
 
+	/*
+	 * Writes the grid into a file
+	 */
 	@Override
 	public void outputGrid(String filename) throws FileNotFoundException, IOException {
 		try {
@@ -98,60 +100,27 @@ public class StdSudokuGrid extends SudokuGrid {
 
 	} // end of toString()
 
-	
-
+	/*
+	 * Returns true if the grid is valid
+	 */
 	@Override
 	public boolean validate() {
-
 		for (int i = 0; i < this.gridSize; i++) {
-			if(this.validateRow(i)) {
-				if(this.validateColumn(i)) {
-					if(this.validateBox(i)) {
-						continue;
-					}else {
-						return false;
-					}
-				}else {
+			for (int j = 0; j < this.gridSize; j++) {
+				if (this.grid[i][j] == -1) {
 					return false;
 				}
-			}else {
-				return false;
 			}
-//			if( this.validateRow(i) && this.validateColumn(i) && this.validateBox(i)) {
-//				continue;
-//			}else {
-//				return false;
-//			}
 		}
 
-		// placeholder
+		for (int i = 0; i < this.gridSize; i++) {
+			if (this.validateRow(i) && this.validateColumn(i) && this.validateBox(i)) {
+				continue;
+			} else {
+				return false;
+			}
+		}
 		return true;
-	} // end of validate()
+	}
 
 } // end of class StdSudokuGrid
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
