@@ -52,6 +52,7 @@ public class AlgorXSolver extends StdSudokuSolver {
 		removedRows.add(rowIndex);
 
 		Iterator<Integer> colItr = this.cmActiveCols.iterator();
+		
 		while (colItr.hasNext()) {
 			int j = (Integer) colItr.next();
 
