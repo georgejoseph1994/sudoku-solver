@@ -2,6 +2,9 @@ package solver;
 
 import java.util.*;
 
+/*
+ * Class representing Killer solver with dancing links 
+ */
 public class KillerDancingLinks {
 
 	/*
@@ -12,13 +15,15 @@ public class KillerDancingLinks {
 	int[][] solutionMatrix;
 	private ColumnNode header;
 	private List<DancingNode> solution;
-	int cageConstraintsList[][][]; 
+	int cageConstraintsList[][][];
 	int[] validInputs;
 	int[][] grid;
+
 	/*
 	 * Constructor
 	 */
-	public KillerDancingLinks(int[][] coverMatrix, int size, int[][][] cageConstraintsList, int[] validInputs, int[][] grid) {
+	public KillerDancingLinks(int[][] coverMatrix, int size, int[][][] cageConstraintsList, int[] validInputs,
+			int[][] grid) {
 		header = constructDancingLinks(coverMatrix);
 		this.gridSize = size;
 		this.cageConstraintsList = cageConstraintsList;
@@ -72,8 +77,8 @@ public class KillerDancingLinks {
 				/* If 1 is found */
 				if (coverMatrix[i][j] == 1) {
 
-					ColumnNode colNode = columnNodesList.get(j);            
-					DancingNode newNode = new DancingNode(colNode,i);
+					ColumnNode colNode = columnNodesList.get(j);
+					DancingNode newNode = new DancingNode(colNode, i);
 
 					if (prev == null)
 						prev = newNode;
@@ -121,88 +126,47 @@ public class KillerDancingLinks {
 			this.solutionMatrix[row][column] = value;
 		}
 	}
-	
+
 	/*
-	 * Solution list to sudoku matrix transformation
+	 * Change one cell in sudoku matrix to the value corresponding to the input
+	 * dnode
 	 */
 	private int[] setOneCellInSudokuMatrix(DancingNode dNode) {
-			
-			DancingNode rcNode = dNode;
-			int x= dNode.rowNumber;
-			int rowIndex = x / (this.gridSize * this.gridSize);
-			int colIndex = (x / this.gridSize) % this.gridSize;
-			int value = this.validInputs[x % this.gridSize];
-			
-			this.grid[rowIndex][colIndex] = value;
-//			
-//			int min = Integer.parseInt(rcNode.Column.name);
-//
-//			for (DancingNode tmp = dNode.Right; tmp != dNode; tmp = tmp.Right) {
-//				int tempVal = Integer.parseInt(tmp.Column.name);
-//				if (tempVal < min) {
-//					min = tempVal;
-//					rcNode = tmp;
-//				}
-//			}
-//			
-//			
-//			/* Calculating position and value */
-//			int x = Integer.parseInt(rcNode.Column.name);
-//			int y = Integer.parseInt(rcNode.Right.Column.name);
-//
-//			int column = x % gridSize;
-//			int row = x / gridSize;
-//			int value = (y % gridSize) + 1;
 
-			/* Adding the value to solution matrix */
-//			this.grid[rowIndex][column] = value;
-			int[] returnArr = {rowIndex, colIndex};
-			return returnArr;
-		
-	}
-	
-	/*
-	 * Solution list to sudoku matrix transformation
-	 */
-	private int[] unsetOneCellInSudokuMatrix(DancingNode dNode) {
 		DancingNode rcNode = dNode;
-		int x= dNode.rowNumber;
+		int x = dNode.rowNumber;
 		int rowIndex = x / (this.gridSize * this.gridSize);
 		int colIndex = (x / this.gridSize) % this.gridSize;
 		int value = this.validInputs[x % this.gridSize];
-		
-		this.grid[rowIndex][colIndex] = -1;
-		int[] returnArr = {rowIndex, colIndex};
+
+		this.grid[rowIndex][colIndex] = value;
+		int[] returnArr = { rowIndex, colIndex };
 		return returnArr;
-//			DancingNode rcNode = dNode;
-//			int min = Integer.parseInt(rcNode.Column.name);
-//
-//			for (DancingNode tmp = dNode.Right; tmp != dNode; tmp = tmp.Right) {
-//				int tempVal = Integer.parseInt(tmp.Column.name);
-//				if (tempVal < min) {
-//					min = tempVal;
-//					rcNode = tmp;
-//				}
-//			}
-//
-//			/* Calculating position and value */
-//			int x = Integer.parseInt(rcNode.Column.name);
-//			int y = Integer.parseInt(rcNode.Right.Column.name);
-//
-//			int column = x % gridSize;
-//			int row = x / gridSize;
-//			int value = (y % gridSize) + 1;
-//
-//			/* Adding the value to solution matrix */
-//			this.grid[row][column] = -1;
-//			int[] returnArr = {row, column};
-//			return returnArr;
-		
+
 	}
-	
+
+	/*
+	 * Unset one cell in sudoku matrix to -1
+	 */
+	private int[] unsetOneCellInSudokuMatrix(DancingNode dNode) {
+		DancingNode rcNode = dNode;
+		int x = dNode.rowNumber;
+		int rowIndex = x / (this.gridSize * this.gridSize);
+		int colIndex = (x / this.gridSize) % this.gridSize;
+		int value = this.validInputs[x % this.gridSize];
+
+		this.grid[rowIndex][colIndex] = -1;
+		int[] returnArr = { rowIndex, colIndex };
+		return returnArr;
+	}
+
+	/*
+	 * Checks cage validation constraint for the input x,y
+	 */
 	public boolean fastValidateCage1(int x, int y) {
 		ArrayList<int[][]> selectedCageConstraintList = new ArrayList<int[][]>();
-		
+		HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+
 		/* iterating each constraint */
 		int sizeOfCageConstraintList = this.cageConstraintsList.length;
 
@@ -210,7 +174,7 @@ public class KillerDancingLinks {
 			int constraintLength = this.cageConstraintsList[l].length;
 
 			boolean xyFound = false;
-			
+
 			for (int m = 1; m < constraintLength; m++) {
 				int posX = this.cageConstraintsList[l][m][0];
 				int posY = this.cageConstraintsList[l][m][1];
@@ -218,24 +182,42 @@ public class KillerDancingLinks {
 					xyFound = true;
 				}
 			}
-			if (xyFound==true) {
+			if (xyFound == true) {
 				selectedCageConstraintList.add(this.cageConstraintsList[l]);
+				break;
 			}
 		}
-		
 
 		for (int i = 0; i < selectedCageConstraintList.size(); i++) {
+			/* Creating a hash map from the valid inputs */
+
+			for (int m = 0; m < this.validInputs.length; m++) {
+				map.put(this.validInputs[m], false);
+			}
+
 			int sum = 0;
 			int j = 1;
 			boolean minusOneFound = false;
 			int constraintLength = selectedCageConstraintList.get(i).length;
-			
-			for (j = 1; j < constraintLength ; j++) {
+
+			for (j = 1; j < constraintLength; j++) {
 				int posX = selectedCageConstraintList.get(i)[j][0];
 				int posY = selectedCageConstraintList.get(i)[j][1];
 
 				/* Skipping if -1 */
 				if (this.grid[posX][posY] != -1) {
+
+					/* Checking if it is a valid input in the grid */
+					if (map.containsKey(this.grid[posX][posY])) {
+						if (map.get(this.grid[posX][posY])) {
+							return false;
+						} else {
+							map.put(this.grid[posX][posY], true);
+						}
+					} else {
+						return false;
+					}
+
 					/* Checking the sum of cage equals cage sum */
 					sum += this.grid[posX][posY];
 					if (sum > selectedCageConstraintList.get(i)[0][0]) {
@@ -255,14 +237,10 @@ public class KillerDancingLinks {
 		return true;
 	}
 
+	/*
+	 * Method to do the recursive search in the DLX
+	 */
 	private void dancingSearch(int k) {
-//		 for (DancingNode str : this.solution)
-//	      { 		      
-//	           System.out.println(str.Column); 		
-//	      }
-//		System.out.println("......................");
-//		 DisplayDLX();
-//		 System.out.println("......................");
 		/* If there is nothing remaining in the header */
 		if (header.Right == header) {
 			solutionFound = true;
@@ -271,21 +249,20 @@ public class KillerDancingLinks {
 		} else {
 			ColumnNode columnNode = header.Right.Column;
 			columnNode.cover();
-//			header.size--;
 
 			/* Iterating through the row */
 			for (DancingNode row = columnNode.Down; row != columnNode; row = row.Down) {
 				int possition[];
 				possition = this.setOneCellInSudokuMatrix(row);
-				
-				if(this.fastValidateCage1(possition[0], possition[1])) {
+
+				if (this.fastValidateCage1(possition[0], possition[1])) {
 					/* Adding it to solution list */
 					solution.add(row);
 
 					/* Covering columns */
 					for (DancingNode j = row.Right; j != row; j = j.Right) {
 						j.Column.cover();
-//						header.size--;
+
 					}
 					/* Recursive invocation */
 					dancingSearch(k + 1);
@@ -298,14 +275,12 @@ public class KillerDancingLinks {
 					/* Uncovering */
 					for (DancingNode j = row.Left; j != row; j = j.Left) {
 						j.Column.uncover();
-//						header.size++;
 					}
-				}else {
+				} else {
 					this.unsetOneCellInSudokuMatrix(row);
 				}
 			}
 			columnNode.uncover();
-//			header.size++;
 		}
 	}
 

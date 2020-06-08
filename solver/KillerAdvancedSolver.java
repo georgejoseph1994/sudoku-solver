@@ -138,7 +138,7 @@ public class KillerAdvancedSolver extends KillerSudokuSolver
 	public int getCoverMatrixIndex(int row, int col, int offset) {
 		return row * this.gridSize * this.gridSize + col * this.gridSize + offset;
 	}
-
+	
     @Override
     public boolean solve(SudokuGrid grid) {
 		/* initialising grid size */
@@ -149,17 +149,22 @@ public class KillerAdvancedSolver extends KillerSudokuSolver
 		/* Building a cover matrix */
 		this.buildCoverMatrix((KillerSudokuGrid) grid);
 		
-	
+		/*
+		 * invoking the dancing links solver
+		 */
 		KillerDancingLinks killerDancingLinks = new KillerDancingLinks(this.coverMatrix, this.gridSize, grid.cageConstraintsList , grid.validInputs, grid.grid);
 		grid.grid = killerDancingLinks.driverFunction();
 		
+		/*
+		 * if it returns a valid grid solution found
+		 */
 		if(grid.grid.length>0) {
 			return true;
 		}else {
 			for(int i=0;i<grid.gridSize;i++) {
 				Arrays.fill(grid.grid[i], -1);
 			}
-			return false;
+			return false; 
 		}
 
         // placeholder

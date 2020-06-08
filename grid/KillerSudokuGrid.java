@@ -76,7 +76,7 @@ public class KillerSudokuGrid extends SudokuGrid {
 				}
 			}
 		} catch (
- 
+
 		Exception e) {
 			System.out.println(e);
 		}
@@ -95,12 +95,12 @@ public class KillerSudokuGrid extends SudokuGrid {
 	} // end of outputBoard()
 
 	@Override
-	public String toString() { 
+	public String toString() {
 		String gridString = "";
 
 		for (int i = 0; i < this.gridSize; i++) {
 			for (int j = 0; j < this.gridSize; j++) {
-				gridString += (this.grid[i][j]); 
+				gridString += (this.grid[i][j]);
 				if (j != this.gridSize - 1) {
 					gridString += ",";
 				}
@@ -111,9 +111,16 @@ public class KillerSudokuGrid extends SudokuGrid {
 		return gridString;
 	} // end of toString()
 
+	
 	public boolean validateCage() {
+		HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>();
 		/* iterating each constraint */
 		for (int i = 0; i < this.cageConstraintsList.length; i++) {
+			/* Creating a hash map from the valid inputs */
+			for (int m = 0; m < this.validInputs.length; m++) {
+				map.put(this.validInputs[m], false);
+			}
+
 			int sum = 0;
 			int j = 1;
 			boolean minusOneFound = false;
@@ -123,6 +130,17 @@ public class KillerSudokuGrid extends SudokuGrid {
 
 				/* Skipping if -1 */
 				if (this.grid[posX][posY] != -1) {
+
+					/* Checking if it is a valid input in the grid */
+					if (map.containsKey(this.grid[posX][posY])) {
+						if (map.get(this.grid[posX][posY])) {
+							return false;
+						} else {
+							map.put(this.grid[posX][posY], true);
+						}
+					} else {
+						return false;
+					}
 					/* Checking the sum of cage equals cage sum */
 					sum += this.grid[posX][posY];
 					if (sum > this.cageConstraintsList[i][0][0]) {
@@ -146,7 +164,7 @@ public class KillerSudokuGrid extends SudokuGrid {
 
 		HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>();
 		ArrayList<int[][]> selectedCageConstraintList = new ArrayList<int[][]>();
-		
+
 		/* iterating each constraint */
 		int sizeOfCageConstraintList = this.cageConstraintsList.length;
 		for (int l = 0; l < sizeOfCageConstraintList; l++) {
@@ -160,11 +178,10 @@ public class KillerSudokuGrid extends SudokuGrid {
 					xyFound = true;
 				}
 			}
-			if (xyFound==true) {
+			if (xyFound == true) {
 				selectedCageConstraintList.add(this.cageConstraintsList[l]);
 			}
 		}
-		
 
 		for (int i = 0; i < selectedCageConstraintList.size(); i++) {
 			/* Creating a hash map from the valid inputs */
@@ -176,7 +193,7 @@ public class KillerSudokuGrid extends SudokuGrid {
 			int j = 1;
 			boolean minusOneFound = false;
 			int constraintLength = selectedCageConstraintList.get(i).length;
-			for (j = 1; j < constraintLength ; j++) {
+			for (j = 1; j < constraintLength; j++) {
 				int posX = selectedCageConstraintList.get(i)[j][0];
 				int posY = selectedCageConstraintList.get(i)[j][1];
 
@@ -231,8 +248,8 @@ public class KillerSudokuGrid extends SudokuGrid {
 		}
 
 		if (!this.validateCage()) {
-			System.out.println("Invalid cage");	
-			return false;			
+			System.out.println("Invalid cage");
+			return false;
 		}
 
 		// placeholder

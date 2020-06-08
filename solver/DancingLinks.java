@@ -8,7 +8,7 @@ public class DancingLinks {
 	 * Global variable of the class
 	 */
 	int gridSize = 0;
-	boolean solutionFound = false;
+	boolean solutionFound = false; 
 	int[][] solutionMatrix;
 	private ColumnNode header;
 	private List<DancingNode> solution;
