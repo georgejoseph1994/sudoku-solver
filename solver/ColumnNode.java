@@ -24,12 +24,13 @@ class ColumnNode extends DancingNode {
 
 	/* uncovering operation */
 	void uncover() {
+		reconnectLR();
 		for (DancingNode i = this.Up; i != this; i = i.Up) {
 			for (DancingNode j = i.Left; j != i; j = j.Left) {
 				j.Column.size++;
 				j.reconnectUD();
 			}
 		}
-		reconnectLR();
+		
 	}
 }

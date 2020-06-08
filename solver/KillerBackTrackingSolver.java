@@ -34,7 +34,7 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver {
 		
 		/* iterating through the grid*/
 		for (int i = 0; i < grid.gridSize; i++) {
-			for (int j = 0; j < grid.gridSize; j++) {
+			for (int j = 0; j < grid.gridSize; j++) { 
 
 				if (grid.grid[i][j] == -1) {
 					

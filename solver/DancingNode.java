@@ -8,6 +8,7 @@ class DancingNode{
 	
         DancingNode Left, Right, Up, Down;
         ColumnNode Column;
+        int rowNumber;
         
         public DancingNode(){
             Left = Right = Up = Down = this;
@@ -16,6 +17,12 @@ class DancingNode{
         public DancingNode(ColumnNode c){
             this();
             Column = c;
+        }
+        
+        public DancingNode(ColumnNode c, int rowNumber){
+            this();
+            Column = c;
+            this.rowNumber = rowNumber;
         }
         
         DancingNode connectDown(DancingNode dNode){
